@@ -104,7 +104,7 @@ class ImageSaver:
         cv2.imwrite(segmented_path, data.segmented_img)
 
         # Save depth
-        save_depth(self.dir_dict[ImgDirs.DEPTH] / f"{str_step}.png", data.depth_img)
+        #save_depth(self.dir_dict[ImgDirs.DEPTH] / f"{str_step}.png", data.depth_img)
 
         # Generating gt_vis reduces the script performance 
 

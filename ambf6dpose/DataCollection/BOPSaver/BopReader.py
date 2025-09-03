@@ -170,12 +170,12 @@ class BopDatasetReader(AbstractReader):
 
         raw_path = str(self.__dict_paths[scene_id][ImgDirs.RAW] / f"{img_name}")
         seg_path = str(self.__dict_paths[scene_id][ImgDirs.SEGMENTED] / f"{img_name}")
-        depth_path = str(self.__dict_paths[scene_id][ImgDirs.DEPTH] / f"{img_name}")
+        #depth_path = str(self.__dict_paths[scene_id][ImgDirs.DEPTH] / f"{img_name}")
 
         sample = DatasetSample(
             raw_img=cv2.imread(raw_path),
             segmented_img=cv2.imread(seg_path),
-            depth_img=self.load_depth(depth_path),
+            #depth_img=self.load_depth(depth_path),
             needle_pose=self.get_extrinsic_matrix(
                 RigidObjectsIds.needle_pose.value, scene_id, img_name
             ),
@@ -195,9 +195,9 @@ class BopDatasetReader(AbstractReader):
         )
         return sample
 
-    def load_depth(self, path):
+    '''def load_depth(self, path):
         d: np.ndarray = imageio.imread(path)
-        return d.astype(np.float32)
+        return d.astype(np.float32)'''
 
     def get_camera_intrinsics(self, scene_id: int, img_name: str) -> np.ndarray:
 
