@@ -17,11 +17,11 @@ def assert_paths_exist(paths: List[Path]):
 
 def setup_rendering() -> BOPRendererWrapper:
     file_path = Path(__file__).resolve().parent
-    needle_model_path = file_path / "../../SampleData/Models/Needle.ply"
+    needle_model_path = file_path / "../../SampleData1/Models/Needle.ply"
     needle_model_path = needle_model_path.resolve()
-    toolpitchlink_model_path = file_path / "../../SampleData/Models/ToolPitchLink.ply"
+    toolpitchlink_model_path = file_path / "../../SampleData1/Models/ToolPitchLink.ply"
     toolpitchlink_model_path = toolpitchlink_model_path.resolve()
-    toolyawlink_model_path = file_path / "../../SampleData/Models/ToolYawLink.ply"
+    toolyawlink_model_path = file_path / "../../SampleData1/Models/ToolYawLink.ply"
     toolyawlink_model_path = toolyawlink_model_path.resolve()
 
     assert_paths_exist(
@@ -97,9 +97,9 @@ def annotate_img(my_renderer, sample: DatasetSample):
 
 def main():
     file_path = Path(__file__).resolve().parent
-    #dataset_path = file_path / "../../SampleData/BOP/needle_gripper_dataset_V0.0.2"
+    #dataset_path = file_path / "../../SampleData1/BOP/needle_gripper_dataset_V0.0.2"
     
-    dataset_path = file_path / "../dataset"
+    dataset_path = file_path / "../SampleData2"
     dataset_path = dataset_path.resolve()
     assert dataset_path.exists(), f"Path {dataset_path} does not exist"
 

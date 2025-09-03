@@ -368,35 +368,3 @@ def _replace_enums_scene_camera(content: dict[int, dict[Enum, Any]]) -> dict[str
                 new_dict[img_id][k] = v
 
     return dict(new_dict)
-
-
-## Old save_json func
-
-# def save_json(file, content)
-#     """Saves the provided content to a JSON file.
-#     Taken from BOP toolkit
-
-#     :param path: Path to the output JSON file.
-#     :param content: Dictionary/list to save.
-#     """
-
-#     if isinstance(content, dict):
-#         file.write("{\n")
-#         content_sorted = sorted(content.items(), key=lambda x: x[0])
-#         for elem_id, (k, v) in enumerate(content_sorted):
-#             file.write('  "{}": {}'.format(k, json.dumps(v, sort_keys=True)))
-#             if elem_id != len(content) - 1:
-#                 file.write(",")
-#             file.write("\n")
-#         file.write("}")
-
-#     elif isinstance(content, list):
-#         file.write("[\n")
-#         for elem_id, elem in enumerate(content):
-#             file.write("  {}".format(json.dumps(elem, sort_keys=True)))
-#             if elem_id != len(content) - 1:
-#                 file.write(",")
-#             file.write("\n")
-#         file.write("]")
-#     else:
-#         json.dump(content, file, sort_keys=True)
