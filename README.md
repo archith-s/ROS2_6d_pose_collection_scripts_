@@ -10,12 +10,12 @@ Package to generate 6D pose datasets of surgical instruments. The package is bas
 **Main functionalities:**
 
 1. Replaying of pre-recorded trajectories (See [simple_replay.py](./scripts/simple_replay.py)) 
-2. Recording of  6D pose datasets in the BOP format (See [collect_data.py](./scripts/collect_data.py)).
+2. Recording of 6D pose datasets in the BOP format (See [collect_data.py](./scripts/collect_data.py)).
 3. Reader class for datasets generated in BOP format (See [BopDatasetReader](./ambf6dpose/DataCollection/BOPSaver/BopReader.py)).
 
 # Getting started
 
-The following code base will require Ubuntu 20.04, ROS noetic, [AMBF][ambf-github], and the [surgical robotics challenge][SRC-github] simulation environment. After obtaining all dependencies, first install `ambf6dpose` package with:
+The following code base will require Ubuntu 22.04, ROS iron and above, [AMBF][ambf-github], and the [surgical robotics challenge][SRC-github] simulation environment. The surgical_robotics_challenge must be exported to path to be utilized by the pose collection script. After obtaining all dependencies, first install `ambf6dpose` package with:
 
 ```bash
 pip install -e .
@@ -25,12 +25,12 @@ and then install additional dependencies with:
 
 ```bash
 pip install -r requirements/requirements.txt
-sudo apt install ros-noetic-ros-numpy
+sudo apt install ros-iron-ros-numpy
 ```
 
 ## Data generation  
 
-To generated data, you will first need to open the surgical robotics challenge scene and then replay motions with the `simple_replay.py` script. While the motions are being replayed, you can collect data with the `collect_data.py` script. For more information about to each script refer see below.
+To generate data, you will first need to open the surgical robotics challenge scene and then replay motions either with a pre-recorded rosbag or through the `simple_replay.py` script. While the motions are being replayed, you can collect data with the `collect_data.py` script. For more information about to each script refer see below.
 
 
 **Replay instrumention motion**
@@ -79,7 +79,7 @@ Options:
 <details>
 <summary> Ros sync client did not received any data/timeout exceptions </summary>
 <br>
-Ros topic for images are hardcoded on the <a href="./ambf6dpose/DataCollection/Rostopics.py">Rostopics.py</a>. If you are using different topic names, the ROS sync client will not generate any data to be saved. In particular, check if the toolpitchlink state for PSM1 and PSM2 are being published. These are not published by default on the simulation environment
+Ros topic for images are hardcoded on the <a href="./ambf6dpose/DataCollection/Rostopics.py">Rostopics.py</a>. If you are using different topic names, the ROS sync client will not generate any data to be saved. In particular, check if the toolpitchlink state for PSM1 and PSM2 are being published. These are not published by default on the simulation environment. 
 
 ```
 /ambf/env/psm1/toolpitchlink/Command
@@ -90,27 +90,6 @@ To start publishing change the toolpitchlink BODY `passive flag` to `false` in t
 
 </details>
 
-<details>
-<summary> Incompatibility issues with numpy greater than 1.20 </summary>
-
-<br>
-If you find incompatibility issues with your numpy version, you will probably need to modify some source files of <code>ros_numpy</code> to remove the numpy deprecated attributes. Replace <code>np.float</code> for <code>float</code> at line 224 of <code>point_cloud2.py</code>.  
-
-<br>
-
-``` bash
-File "/opt/ros/noetic/lib/python3/dist-packages/ros_numpy/point_cloud2.py", li ne 224 , in def get_xyz_points(cloud_array, remove_nans=True, dtype=np.float):
-File "/home/jin/.local/lib/python3.8/site-packages/numpy/init.py", line 30 5 , in _getattr
-
-raise AttributeError(former_attrs[attr])
-AttributeError: module 'numpy' has no attribute 'float'.
-'np.float" was a deprecated alias for the builtin 'float'. To avoid this error 
-In existing code, use 'float' by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use 'np.float64" here.
-The aliases was originally deprecated in NumPy 1.20; for more details and guidan ce see the original release note at:
-https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
-```
-
-</details>
 
 
 # Citation
