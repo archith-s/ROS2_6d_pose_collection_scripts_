@@ -1,5 +1,6 @@
 # collect_data_ros2.py
-# python3 collect_data.py --path ./dataset --scene_id 1
+# python ROS2_6d_pose_collection_scripts_/scripts/collect_data.py --path ./ROS2_6d_pose_collection_scripts_/dataset --scene_id 1
+
 from pathlib import Path
 import sys
 import time
@@ -20,11 +21,13 @@ from ambf6dpose.DataCollection.BOPSaver.BopSaver import BopSampleSaver
 
 
 # ───────────────────────── signal handler ──────────────────────────
-def signal_handler(sig, frame):
+
+
+'''def signal_handler(sig, frame):
     print("\nClosing collection script")
     time.sleep(10)
     if rclpy.ok():  # Only shutdown if still active
-        rclpy.shutdown()
+        rclpy.shutdown()'''
                             # replaces rospy.signal_shutdown
 
 
@@ -48,9 +51,82 @@ def wait_for_data(client: AbstractSimulationClient):
         )
         sys.exit(1)
 
+# ————————————————————————— signal handler ——————————————————————————
+def signal_handler(sig, frame):
+    """
+    Signals the ROS2 context to shut down. 
+    This will cause 'ros_ok()' to return False, breaking the while loop.
+    """
+    print("\n[SIGINT] Stop requested. Finalizing dataset...")
+    if rclpy.ok():
+        rclpy.shutdown()
+
+# ————————————————————————— collection loop —————————————————————————
+def start_collection(
+    samples_generator: SimulatorDataProcessor,
+    saver: AbstractSaver,
+    sample_time: float,
+):
+    last_time = time.time()
+    count = 0
+    
+    # The 'with' block ensures that even if an error occurs, 
+    # the saver's __exit__ method is called to write the JSON metadata.
+    with saver:
+        print("Starting collection loop. Press Ctrl+C to save and exit.")
+        while ros_ok():
+            current_time = time.time()
+            if current_time - last_time > sample_time:
+                # This call waits for fresh ROS data
+                wait_for_data(samples_generator.simulation_client)
+                
+                # Double-check ROS status after waiting
+                if not ros_ok():
+                    break
+
+                sample = samples_generator.generate_dataset_sample()
+                saver.save_sample(sample)
+                
+                print(
+                    f" Saved Sample: {count} | "
+                    f"Interval: {current_time - last_time:0.3f}s"
+                )
+                
+                last_time = time.time()
+                count += 1
+            else:
+                # Prevents the script from hogging 100% CPU while waiting
+                time.sleep(0.01)
+        
+        print("\nExited loop. Finalizing files on disk...")
+
+# ————————————————————————— Click CLI ———————————————————————————————
+@click.command()
+@click.option("--path", required=True, help="Path to save dataset")
+@click.option("--scene_id", required=True, help="scene_id")
+@click.option("--sample_time", default=0.5, help="Sample every n seconds")
+def collect_data(path: str, scene_id: int, sample_time: float) -> None:
+    # Set up SIGINT handler
+    signal.signal(signal.SIGINT, signal_handler)
+    
+    path = Path(path).resolve()
+    scene_id = int(scene_id)
+    
+    # SyncRosInterface calls rclpy.init() internally
+    client = SyncRosInterface()
+    print(f"Connected to ROS2: {client}")
+    
+    samples_generator = SimulatorDataProcessor(client)
+    saver = create_sample_saver(path, "bop", scene_id)
+    
+    # This will now exit cleanly when rclpy.shutdown() is called in the handler
+    start_collection(samples_generator, saver, sample_time)
+    
+    print(f"Collection finished. Dataset saved to: {path}")
+
 
 # ───────────────────────── collection loop ─────────────────────────
-def start_collection(
+'''def start_collection(
     samples_generator: SimulatorDataProcessor,
     saver: AbstractSaver,
     sample_time: float,
@@ -98,7 +174,7 @@ def collect_data(path: str, scene_id: int, sample_time: float) -> None:
     start_collection(samples_generator, saver, sample_time)
     # Normal shutdown if the loop exits
     print('Out of start collection loop')
-    rclpy.shutdown()
+    rclpy.shutdown()'''
 
 if __name__ == "__main__":
     collect_data()

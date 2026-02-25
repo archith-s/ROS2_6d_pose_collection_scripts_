@@ -13,7 +13,7 @@ from ambf6dpose.DataCollection.DatasetSample import DatasetSample
 from ambf6dpose.DataCollection.ReaderSaverUtils import AbstractReader
 from dataclasses import dataclass, field
 import cv2
-import imageio
+#import imageio
 from ambf6dpose.DataCollection.ReaderSaverUtils import is_rotation, trnorm
 
 
@@ -80,10 +80,17 @@ class YamlDatasetReader(AbstractReader):
             psm2_toolyawlink_pose=None,
             intrinsic_matrix=self.get_matrix_from_yaml(YamlFiles.INTRINSIC, step_str),
         )
-        return sample
-
+        return sample   
+    '''
     def load_depth(self, path):
         d: np.ndarray = imageio.imread(path)
+        return d.astype(np.float32)'''
+    
+    def load_depth(self, path: str) -> np.ndarray:
+        # cv2.IMREAD_UNCHANGED ensures 16-bit data isn't converted to 8-bit
+        d = cv2.imread(path, cv2.IMREAD_UNCHANGED)
+        if d is None:
+            raise IOError(f"Could not load depth image at {path}")
         return d.astype(np.float32)
 
     def get_matrix_from_yaml(self, yaml_type: YamlFiles, key: str) -> np.ndarray:

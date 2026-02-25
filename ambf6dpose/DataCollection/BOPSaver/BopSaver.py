@@ -10,7 +10,7 @@ import cv2
 import numpy as np
 from enum import Enum
 import yaml
-import png
+#import png
 from contextlib import ExitStack
 from ambf6dpose.DataCollection.DatasetSample import DatasetSample, RigidObjectsIds
 from ambf6dpose.DataCollection.ReaderSaverUtils import AbstractSaver

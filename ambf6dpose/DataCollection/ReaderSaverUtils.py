@@ -6,7 +6,7 @@ from ambf6dpose.DataCollection.DatasetSample import DatasetSample
 import numpy as np
 from enum import Enum, auto
 import cv2
-import png
+#import png
 
 class ImgDirs(Enum):
     RAW = auto()
@@ -112,7 +112,29 @@ class ImageSaver:
         # blended_path = str(self.dir_dict[ImgDirs.GT_VISUALIZATION] / f"{str_step}.png")
         # cv2.imwrite(blended_path, data.blended_img)
 
-def save_depth(path:Path, im:np.ndarray):
+# 1. Remove 'import png' from the top
+# 2. Keep 'import cv2' and 'import numpy as np'
+
+def save_depth(path: Path, im: np.ndarray):
+    """
+    Saves a depth image (16-bit) to a PNG file using OpenCV.
+    Maintains 100% compatibility with the original depth data.
+    """
+    path_str = str(path)
+    if not path_str.lower().endswith('.png'):
+        raise ValueError('Only PNG format is currently supported.')
+
+    # Round and cast to 16-bit unsigned integer (0-65535)
+    # This ensures your depth values (e.g., 1000mm) stay accurate.
+    im_uint16 = np.round(im).astype(np.uint16)
+
+    # cv2.imwrite automatically detects uint16 and saves a 16-bit PNG
+    success = cv2.imwrite(path_str, im_uint16)
+    
+    if not success:
+        raise IOError(f"Failed to save depth image to {path_str}")
+
+'''def save_depth(path:Path, im:np.ndarray):
   """Saves a depth image (16-bit) to a PNG file.
 
   :param path: Path to the output depth image file.
@@ -127,4 +149,4 @@ def save_depth(path:Path, im:np.ndarray):
   # PyPNG library can save 16-bit PNG and is faster than imageio.imwrite().
   w_depth = png.Writer(im.shape[1], im.shape[0], greyscale=True, bitdepth=16)
   with open(path, 'wb') as f:
-    w_depth.write(f, np.reshape(im_uint16, (-1, im.shape[1])))
+    w_depth.write(f, np.reshape(im_uint16, (-1, im.shape[1])))'''

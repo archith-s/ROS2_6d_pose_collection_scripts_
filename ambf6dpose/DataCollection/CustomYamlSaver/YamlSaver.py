@@ -8,7 +8,7 @@ import cv2
 import numpy as np
 from enum import Enum
 import yaml
-import png
+#import png
 from ambf6dpose.DataCollection.DatasetSample import DatasetSample
 from ambf6dpose.DataCollection.ReaderSaverUtils import AbstractSaver
 from ambf6dpose.DataCollection.ReaderSaverUtils import ImgDirs, ImageSaver

@@ -4,9 +4,9 @@ from typing import Dict, List, Tuple
 import numpy as np
 from ambf6dpose.DataCollection.DatasetSample import DatasetSample, RigidObjectsIds
 
-from bop_toolkit_lib.renderer_vispy import RendererVispy
+from bop_toolkit_lib.rendering.renderer_vispy import RendererVispy
 from bop_toolkit_lib import misc
-from bop_toolkit_lib.renderer_vispy import RendererVispy
+from bop_toolkit_lib.rendering.renderer_vispy import RendererVispy
 from bop_toolkit_lib.visualization import draw_rect, write_text_on_image
 
 

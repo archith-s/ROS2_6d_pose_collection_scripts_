@@ -16,7 +16,7 @@ from ambf6dpose.DataCollection.DatasetSample import DatasetSample, RigidObjectsI
 from ambf6dpose.DataCollection.ReaderSaverUtils import AbstractReader, ImgDirs
 from dataclasses import dataclass, field
 import cv2
-import imageio
+#import imageio
 from ambf6dpose.DataCollection.ReaderSaverUtils import is_rotation, trnorm
 from natsort import natsorted
 
@@ -99,6 +99,13 @@ class BopDatasetReader(AbstractReader):
 
     def get_scene_id(self) -> List[str]:
         return self.scene_id_list
+    
+    import re
+
+    '''def natsorted_logic(l):
+        convert = lambda text: int(text) if text.isdigit() else text.lower()
+        alphanum_key = lambda key: [convert(c) for c in re.split('([0-9]+)', str(key))]
+        return sorted(l, key=alphanum_key)'''
 
     def __load_data(self):
         folder_names = get_folder_names()
@@ -141,7 +148,7 @@ class BopDatasetReader(AbstractReader):
                     f, scene_id, GroundTruthFiles.SCENE_CAMERA
                 )
 
-    def _load_json(self, path: Path, scene_id: int, gt_file: GroundTruthFiles):
+    '''def _load_json(self, path: Path, scene_id: int, gt_file: GroundTruthFiles):
         try:
             data = json.load(path)
         except json.decoder.JSONDecodeError as e:
@@ -149,7 +156,19 @@ class BopDatasetReader(AbstractReader):
             print(f"Error loading {scene_id} {gt_file.value}  \n")
             raise e
 
-        return data
+        return data'''
+    
+    def _load_json(self, f_handle, scene_id: str, gt_file: GroundTruthFiles):
+        try:
+            # We are passing the file handle directly from the 'with open' block
+            return json.load(f_handle)
+        except json.decoder.JSONDecodeError as e:
+            print("-" * 50)
+            print(f"CRITICAL ERROR: {gt_file.value} in scene {scene_id} is corrupted!")
+            print(f"Error Details: {e}")
+            print("Check if the file was saved correctly or if the disk is full.")
+            print("-" * 50)
+            raise e
 
     def format_step(self, step: int) -> str:
         return f"{step:{DatasetConsts.FMT_STR.value}}"
@@ -248,7 +267,9 @@ class BopDatasetReader(AbstractReader):
 
 if __name__ == "__main__":
     file_path = Path(__file__).resolve().parent
-    root_path2 = file_path / "../../../SampleData/BOP/needle_gripper_dataset_V0.0.2"
+    #root_path2 = file_path / "../../../SampleData1/BOP/needle_gripper_dataset_V0.0.2"
+
+    root_path2 = file_path / "../../dataset:run_env_SIMPLE_LND_420006"
     root_path2 = root_path2.resolve()
 
     reader = BopDatasetReader(
