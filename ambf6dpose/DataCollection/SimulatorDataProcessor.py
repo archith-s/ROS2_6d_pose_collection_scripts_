@@ -188,36 +188,11 @@ class SimulatorDataProcessor:
         T_LW    = inv(T_WL)
         T_L_OBJ = T_LW @ T_W_OBJ
 
-        # Convert AMBF's raw camera-local axes to OpenCV axes (X right,
-        # Y down, Z forward). This conversion is NOT the same for every
-        # camera: it depends on which raw local axis AMBF actually treats
-        # as "forward" for that particular body, which differs between a
-        # camera nested under a parent (camera_l) and an independent
-        # top-level multibody camera (camera_0/camera_1).
-        #
-        # camera_l (parented to CameraFrame): raw local axes (Y, -Z, -X)
-        # = (right, down, forward).
-        #
-        # camera_0/camera_1 (independent multibody, no parent): raw local
-        # axes (Z, Y, -X) = (right, down, forward) instead — verified
-        # empirically against the live simulator (scripts/debug_camera_poses.py,
-        # 2026-07-08): AMBF places and orients both cameras exactly per the
-        # ADF (0 mm position error, 0 deg pointing error along -X), but
-        # applying camera_l's flip matrix to them treats their local Z as
-        # forward, which is actually perpendicular to their true view
-        # direction (~90 deg off) — this was silently producing the
-        # floating-off-the-tool GT silhouette for camera_0 (and a smaller,
-        # less obvious error for camera_1).
-        if is_world_frame:
-            F = np.array([[0, 0, 1, 0],
-                          [0, 1, 0, 0],
-                          [-1, 0, 0, 0],
-                          [0, 0, 0, 1]])
-        else:
-            F = np.array([[0, 1, 0, 0],
-                          [0, 0, -1, 0],
-                          [-1, 0, 0, 0],
-                          [0, 0, 0, 1]])
+        # Convert AMBF camera axis to OpenCV camera axis (Z forward, Y down)
+        F = np.array([[0, 1, 0, 0],
+                      [0, 0, -1, 0],
+                      [-1, 0, 0, 0],
+                      [0, 0, 0, 1]])
         return F @ T_L_OBJ
 
     def convert_pose_to_mm(self, pose: np.ndarray) -> np.ndarray:
