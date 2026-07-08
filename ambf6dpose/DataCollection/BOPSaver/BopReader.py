@@ -26,6 +26,7 @@ class BopDatasetReader(AbstractReader):
     """
     See bop_toolkit for more info on the dataset structure
 
+
     https://github.com/thodan/bop_toolkit/blob/master/docs/bop_datasets_format.md
 
     Parameters
@@ -269,7 +270,7 @@ if __name__ == "__main__":
     file_path = Path(__file__).resolve().parent
     #root_path2 = file_path / "../../../SampleData1/BOP/needle_gripper_dataset_V0.0.2"
 
-    root_path2 = file_path / "../../dataset:run_env_SIMPLE_LND_420006"
+    root_path2 = file_path / "../../dataset1"
     root_path2 = root_path2.resolve()
 
     reader = BopDatasetReader(

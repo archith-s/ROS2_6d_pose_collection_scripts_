@@ -19,7 +19,7 @@ class DatasetSample:
 
     raw_img: np.ndarray
     segmented_img: np.ndarray
-    #depth_img: np.ndarray
+    depth_img: np.ndarray
     needle_pose: np.ndarray
     psm1_toolpitchlink_pose: np.ndarray
     psm2_toolpitchlink_pose: np.ndarray

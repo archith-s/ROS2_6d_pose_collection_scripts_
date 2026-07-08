@@ -27,7 +27,11 @@ class RawSimulationData:
     needle_pose: np.ndarray
     camera_l_img: np.ndarray
     camera_l_seg_img: np.ndarray
-    #camera_l_depth: np.ndarray
+    camera_0_pose: np.ndarray
+    camera_0_img: np.ndarray
+    camera_1_pose: np.ndarray 
+    camera_1_img: np.ndarray
+    camera_l_depth: np.ndarray
     psm1_toolpitchlink_pose: np.ndarray
     psm2_toolpitchlink_pose: np.ndarray
     psm1_toolyawlink_pose: np.ndarray
@@ -108,7 +112,7 @@ class SyncRosInterface(AbstractSimulationClient):
             )
         # Use ApproximateTimeSynchronizer as before
         self.time_sync = message_filters.ApproximateTimeSynchronizer(
-            self.subscribers, queue_size=10, slop=10.0
+            self.subscribers, queue_size=40, slop=0.1
         )
         self.time_sync.registerCallback(self.cb)
         time.sleep(0.25)      # give subscriptions a moment to connect
