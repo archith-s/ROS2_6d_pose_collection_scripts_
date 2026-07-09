@@ -110,9 +110,21 @@ class SyncRosInterface(AbstractSimulationClient):
                     qos_profile=rclpy.qos.qos_profile_sensor_data,
                 )
             )
-        # Use ApproximateTimeSynchronizer as before
+        # All topics publish at a steady 50Hz (20ms period, std dev ~0.00005s
+        # -- measured via `ros2 topic hz` on /cameras/camera_0/State and
+        # /ambf/env/psm1/toolpitchlink/State, 2026-07-08). The old slop=0.1
+        # (100ms = 5 full simulation ticks) let the synchronizer pair up
+        # messages from up to 5 different instants as if they were
+        # simultaneous -- when the arm was moving quickly, that produced a
+        # visible mismatch between the saved image and the saved pose (the
+        # GT silhouette landing near, but not exactly on, the tool).
+        # slop=0.01 (10ms, half the tick period) makes it impossible for the
+        # synchronizer to span two different simulation ticks, while still
+        # leaving ~100x margin over the measured jitter for normal
+        # publishing/serialization delays (e.g. image messages take longer
+        # to serialize than plain pose messages).
         self.time_sync = message_filters.ApproximateTimeSynchronizer(
-            self.subscribers, queue_size=40, slop=0.1
+            self.subscribers, queue_size=40, slop=0.01
         )
         self.time_sync.registerCallback(self.cb)
         time.sleep(0.25)      # give subscriptions a moment to connect
