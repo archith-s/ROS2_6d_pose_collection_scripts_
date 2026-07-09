@@ -21,7 +21,7 @@ import numpy as np
 
 from ambf6dpose import SyncRosInterface
 
-np.set_printoptions(precision=4, suppress=True)
+np.set_printoptions(precision=8, suppress=True)
 
 
 # ---------------------------------------------------------------------------
@@ -45,29 +45,30 @@ EXPECTED = {
 
 def pointing_error_deg(actual_R: np.ndarray, actual_pos: np.ndarray) -> tuple:
     """
-    Convention-independent check: does EITHER local axis of actual_R
-    (+Z or -Z — whichever AMBF actually uses as "forward") point from
-    actual_pos toward LOOK_AT? Returns (best_error_deg, which_axis).
-
-    This deliberately avoids assuming AMBF's exact right/up handedness
-    (Z-forward vs -Z-forward, right = up x forward vs forward x up, ...) —
-    guessing that wrong would produce a false MISMATCH verdict. Checking
-    "does some camera axis point at the target" is convention-free and
-    still answers the question that actually matters: is camera_0 oriented
-    toward the phantom at all, or off in some unrelated direction?
+    Check every local axis (+/-X, +/-Y, +/-Z) against the true LOOK_AT
+    direction and report the best match. We've since empirically confirmed
+    (candidate testing against real image data, 2026-07-08) that -X is the
+    correct forward axis for camera_0/camera_1, matching camera_l's own
+    convention exactly -- but we check all six here anyway, at full
+    precision, since the earlier 4-decimal-rounded printout may have been
+    hiding a small residual (a degree or two) that's too small to see
+    rounded but large enough to visibly offset the rendered silhouette by
+    tens of pixels at this camera's ~90-100mm working distance.
     """
     required_dir = LOOK_AT - actual_pos
     required_dir = required_dir / np.linalg.norm(required_dir)
 
-    z_axis = actual_R[:, 2]
     best_err = None
     best_which = None
-    for which, cand in [("+Z", z_axis), ("-Z", -z_axis)]:
-        cos_a = np.clip(np.dot(cand, required_dir), -1.0, 1.0)
-        err = np.degrees(np.arccos(cos_a))
-        if best_err is None or err < best_err:
-            best_err = err
-            best_which = which
+    for i, axis_name in enumerate(["X", "Y", "Z"]):
+        for sign, sign_name in [(1, "+"), (-1, "-")]:
+            cand = sign * actual_R[:, i]
+            cos_a = np.clip(np.dot(cand, required_dir), -1.0, 1.0)
+            err = np.degrees(np.arccos(cos_a))
+            which = f"{sign_name}{axis_name}"
+            if best_err is None or err < best_err:
+                best_err = err
+                best_which = which
     return best_err, best_which
 
 
