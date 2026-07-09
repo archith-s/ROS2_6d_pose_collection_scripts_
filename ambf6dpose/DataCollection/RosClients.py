@@ -112,19 +112,21 @@ class SyncRosInterface(AbstractSimulationClient):
             )
         # All topics publish at a steady 50Hz (20ms period, std dev ~0.00005s
         # -- measured via `ros2 topic hz` on /cameras/camera_0/State and
-        # /ambf/env/psm1/toolpitchlink/State, 2026-07-08). The old slop=0.1
-        # (100ms = 5 full simulation ticks) let the synchronizer pair up
-        # messages from up to 5 different instants as if they were
-        # simultaneous -- when the arm was moving quickly, that produced a
-        # visible mismatch between the saved image and the saved pose (the
-        # GT silhouette landing near, but not exactly on, the tool).
-        # slop=0.01 (10ms, half the tick period) makes it impossible for the
-        # synchronizer to span two different simulation ticks, while still
-        # leaving ~100x margin over the measured jitter for normal
-        # publishing/serialization delays (e.g. image messages take longer
-        # to serialize than plain pose messages).
+        # /ambf/env/psm1/toolpitchlink/State, 2026-07-08). slop=0.01 (half
+        # the tick period) still let through visible GT/image mismatches
+        # during fast arm motion -- verified 2026-07-09 (SIMPLELND_t6dataset,
+        # frames captured during quick moves still showed the silhouette
+        # off the tool). A perfect overlay matters more here than capturing
+        # every sample, so slop is now 0.001 (1ms): ~20x tighter than one
+        # tick period (impossible to span two different simulation ticks)
+        # and still ~15-20x the measured same-topic jitter, so genuinely
+        # simultaneous messages should still match. If this causes
+        # collect_data.py to frequently time out waiting for a synchronized
+        # sample, that means real publish latency exceeds this margin and
+        # slop needs to come back up slightly -- but a dropped sample is the
+        # correct failure mode here, not a silently misaligned one.
         self.time_sync = message_filters.ApproximateTimeSynchronizer(
-            self.subscribers, queue_size=40, slop=0.01
+            self.subscribers, queue_size=40, slop=0.001
         )
         self.time_sync.registerCallback(self.cb)
         time.sleep(0.25)      # give subscriptions a moment to connect
