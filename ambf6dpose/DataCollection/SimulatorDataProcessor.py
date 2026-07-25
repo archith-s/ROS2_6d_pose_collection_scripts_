@@ -104,6 +104,27 @@ class SimulatorDataProcessor:
                     seg_img_attr=None,
                     is_world_frame=True,    # independent multibody, pose in world coords
                 ),
+                CameraConfig(
+                    name="camera_2",
+                    img_attr="camera_2_img",
+                    pose_attr="camera_2_pose",
+                    seg_img_attr=None,
+                    is_world_frame=True,    # independent multibody, pose in world coords
+                ),
+                CameraConfig(
+                    name="camera_3",
+                    img_attr="camera_3_img",
+                    pose_attr="camera_3_pose",
+                    seg_img_attr=None,
+                    is_world_frame=True,    # independent multibody, pose in world coords
+                ),
+                CameraConfig(
+                    name="camera_4",
+                    img_attr="camera_4_img",
+                    pose_attr="camera_4_pose",
+                    seg_img_attr=None,
+                    is_world_frame=True,    # independent multibody, pose in world coords
+                ),
             ]
         self.intrinsic_params = self.calculate_intrinsics()
 

@@ -48,7 +48,7 @@ def create_multi_camera_saver(
             camera_l/    ← full BOP or YAML dataset for camera_l
             camera_0/    ← full BOP or YAML dataset for camera_0
             camera_1/    ← full BOP or YAML dataset for camera_1
-
+            
     Parameters
     ----------
     root : Path

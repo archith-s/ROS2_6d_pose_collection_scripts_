@@ -28,16 +28,22 @@ _SIM_STEP_MSG_TYPES = (CameraState, RigidBodyState)
 # ─────────────────────────────────────────────────────────────────────────────
 @dataclass
 class RawSimulationData:
-    camera_l_pose: np.ndarray
     camera_frame_pose: np.ndarray
     needle_pose: np.ndarray
+    camera_l_pose: np.ndarray
     camera_l_img: np.ndarray
     camera_l_seg_img: np.ndarray
+    camera_l_depth: np.ndarray
     camera_0_pose: np.ndarray
     camera_0_img: np.ndarray
     camera_1_pose: np.ndarray 
     camera_1_img: np.ndarray
-    camera_l_depth: np.ndarray
+    camera_2_pose: np.ndarray
+    camera_2_img: np.ndarray
+    camera_3_pose: np.ndarray
+    camera_3_img: np.ndarray
+    camera_4_pose: np.ndarray
+    camera_4_img: np.ndarray
     psm1_toolpitchlink_pose: np.ndarray
     psm2_toolpitchlink_pose: np.ndarray
     psm1_toolyawlink_pose: np.ndarray
