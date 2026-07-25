@@ -112,7 +112,7 @@ class AbstractSimulationClient(ABC):
 # across topics from different config files never succeeds.)
 @dataclass
 class SyncRosInterface(AbstractSimulationClient):
-    slop: float = 0.05
+    slop: float = 0.2
 
     def __post_init__(self):
         super().__post_init__()
