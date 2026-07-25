@@ -148,7 +148,7 @@ def _stamp_to_seconds(msg) -> float:
 class _SimStepSynchronizer:
     def __init__(self, node: Node, topics, callback,
                  max_buffered_steps: int = 20, max_buffered_timed: int = 40,
-                 max_timed_gap_sec: float = 0.015):
+                 max_timed_gap_sec: float = 0.05):
         self._callback = callback
         self._topics = list(topics)
         self._step_topics = [t for t in self._topics if t.value[1] in _SIM_STEP_MSG_TYPES]
