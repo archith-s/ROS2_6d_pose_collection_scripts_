@@ -50,14 +50,6 @@ class RosTopics(Enum):
     CAMERA_L_DEPTH       = ("/ambf/env/cameras/cameraL/DepthData",      PointCloud2)
     CAMERA_0_IMAGE       = ("/cameras/camera_0/ImageData",              Image)
     CAMERA_0_STATE       = ("/cameras/camera_0/State",                  CameraState)
-    CAMERA_1_IMAGE       = ("/cameras/camera_1/ImageData",              Image)
-    CAMERA_1_STATE       = ("/cameras/camera_1/State",                  CameraState)
-    CAMERA_2_IMAGE       = ("/cameras/camera_2/ImageData",              Image)
-    CAMERA_2_STATE       = ("/cameras/camera_2/State",                  CameraState)
-    CAMERA_3_IMAGE       = ("/cameras/camera_3/ImageData",              Image)
-    CAMERA_3_STATE       = ("/cameras/camera_3/State",                  CameraState)
-    CAMERA_4_IMAGE       = ("/cameras/camera_4/ImageData",              Image)
-    CAMERA_4_STATE       = ("/cameras/camera_4/State",                  CameraState)
     PSM1_TOOL_PITCH_LINK = ("/ambf/env/psm1/toolpitchlink/State",       RigidBodyState)
     PSM2_TOOL_PITCH_LINK = ("/ambf/env/psm2/toolpitchlink/State",       RigidBodyState)
     PSM1_TOOL_YAW_LINK   = ("/ambf/env/psm1/toolyawlink/State",         RigidBodyState)
@@ -68,22 +60,14 @@ class RosTopics(Enum):
 # 2.  topic → RawSimulationData attribute map
 # ============================================================================
 topic_to_attr_dict: Dict[RosTopics, str] = {
-    RosTopics.CAMERA_L_STATE:       "camera_l_pose",
     RosTopics.CAMERA_FRAME:         "camera_frame_pose",
     RosTopics.NEEDLE:               "needle_pose",
+    RosTopics.CAMERA_L_STATE:       "camera_l_pose",
     RosTopics.CAMERA_L_IMAGE:       "camera_l_img",
     RosTopics.CAMERA_L_SEG_IMAGE:   "camera_l_seg_img",
+    RosTopics.CAMERA_L_DEPTH:       "camera_l_depth",
     RosTopics.CAMERA_0_IMAGE:       "camera_0_img",
     RosTopics.CAMERA_0_STATE:       "camera_0_pose",
-    RosTopics.CAMERA_1_IMAGE:       "camera_1_img",
-    RosTopics.CAMERA_1_STATE:       "camera_1_pose",
-    RosTopics.CAMERA_2_IMAGE:       "camera_2_img",
-    RosTopics.CAMERA_2_STATE:       "camera_2_pose",
-    RosTopics.CAMERA_3_IMAGE:       "camera_3_img",
-    RosTopics.CAMERA_3_STATE:       "camera_3_pose",
-    RosTopics.CAMERA_4_IMAGE:       "camera_4_img",
-    RosTopics.CAMERA_4_STATE:       "camera_4_pose",
-    RosTopics.CAMERA_L_DEPTH:       "camera_l_depth",
     RosTopics.PSM1_TOOL_PITCH_LINK: "psm1_toolpitchlink_pose",
     RosTopics.PSM2_TOOL_PITCH_LINK: "psm2_toolpitchlink_pose",
     RosTopics.PSM1_TOOL_YAW_LINK:   "psm1_toolyawlink_pose",
@@ -103,22 +87,14 @@ def get_topics_processing_cb() -> Dict[RosTopics, Callable[[Any], np.ndarray]]:
     pcd_cb = _make_point_cloud_processor()
 
     return {
-        RosTopics.CAMERA_L_STATE:        _process_pose,
         RosTopics.CAMERA_FRAME:          _process_pose,
         RosTopics.NEEDLE:                _process_pose,
+        RosTopics.CAMERA_L_STATE:        _process_pose,
         RosTopics.CAMERA_L_IMAGE:        img_cb,
         RosTopics.CAMERA_L_SEG_IMAGE:    img_cb,
+        RosTopics.CAMERA_L_DEPTH:        pcd_cb,
         RosTopics.CAMERA_0_IMAGE:        img_cb,
         RosTopics.CAMERA_0_STATE:        _process_pose,
-        RosTopics.CAMERA_1_IMAGE:        img_cb,
-        RosTopics.CAMERA_1_STATE:        _process_pose,
-        RosTopics.CAMERA_2_IMAGE:        img_cb,
-        RosTopics.CAMERA_2_STATE:        _process_pose,
-        RosTopics.CAMERA_3_IMAGE:        img_cb,
-        RosTopics.CAMERA_3_STATE:        _process_pose,
-        RosTopics.CAMERA_4_IMAGE:        img_cb,
-        RosTopics.CAMERA_4_STATE:        _process_pose,
-        RosTopics.CAMERA_L_DEPTH:        pcd_cb,
         RosTopics.PSM1_TOOL_PITCH_LINK:  _process_pose,
         RosTopics.PSM2_TOOL_PITCH_LINK:  _process_pose,
         RosTopics.PSM1_TOOL_YAW_LINK:    _process_pose,

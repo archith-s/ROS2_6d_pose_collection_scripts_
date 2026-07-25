@@ -30,14 +30,6 @@ class RawSimulationData:
     camera_l_depth: np.ndarray
     camera_0_pose: np.ndarray
     camera_0_img: np.ndarray
-    camera_1_pose: np.ndarray 
-    camera_1_img: np.ndarray
-    camera_2_pose: np.ndarray
-    camera_2_img: np.ndarray
-    camera_3_pose: np.ndarray
-    camera_3_img: np.ndarray
-    camera_4_pose: np.ndarray
-    camera_4_img: np.ndarray
     psm1_toolpitchlink_pose: np.ndarray
     psm2_toolpitchlink_pose: np.ndarray
     psm1_toolyawlink_pose: np.ndarray
@@ -112,7 +104,7 @@ class AbstractSimulationClient(ABC):
 # across topics from different config files never succeeds.)
 @dataclass
 class SyncRosInterface(AbstractSimulationClient):
-    slop: float = 0.2
+    slop: float = 0.05
 
     def __post_init__(self):
         super().__post_init__()
