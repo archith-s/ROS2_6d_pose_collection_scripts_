@@ -207,7 +207,7 @@ class SimulatorDataProcessor:
             if cfg.seg_img_attr is not None
             else img
         )
-        depth_img = raw.camera_l_depth
+        #depth_img = raw.camera_l_depth
 
         needle_pose     = self.get_needle_extrinsics(raw, cam_pose, cfg.is_world_frame)
         psm1_pitch_pose = self.get_tool_pose(raw.psm1_toolpitchlink_pose, cam_pose, raw, cfg.is_world_frame)
