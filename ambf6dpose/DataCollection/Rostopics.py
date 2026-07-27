@@ -44,10 +44,10 @@ def _process_pose(msg: RigidBodyState) -> np.ndarray:
 class RosTopics(Enum):
     CAMERA_FRAME         = ("/ambf/env/phantom/CameraFrame/State",      RigidBodyState)
     NEEDLE               = ("/ambf/env/phantom/Needle/State",           RigidBodyState)
-    #CAMERA_L_STATE       = ("/ambf/env/cameras/cameraL/State",          CameraState)
-    #CAMERA_L_IMAGE       = ("/ambf/env/cameras/cameraL/ImageData",      Image)
-    #CAMERA_L_SEG_IMAGE   = ("/ambf/env/cameras/cameraL2/ImageData",     Image)
-    #CAMERA_L_DEPTH       = ("/ambf/env/cameras/cameraL/DepthData",      PointCloud2)
+    CAMERA_L_STATE       = ("/ambf/env/cameras/cameraL/State",          CameraState)
+    CAMERA_L_IMAGE       = ("/ambf/env/cameras/cameraL/ImageData",      Image)
+    CAMERA_L_SEG_IMAGE   = ("/ambf/env/cameras/cameraL2/ImageData",     Image)
+    CAMERA_L_DEPTH       = ("/ambf/env/cameras/cameraL/DepthData",      PointCloud2)
     CAMERA_0_IMAGE       = ("/cameras/camera_0/ImageData",              Image)
     CAMERA_0_STATE       = ("/cameras/camera_0/State",                  CameraState)
     PSM1_TOOL_PITCH_LINK = ("/ambf/env/psm1/toolpitchlink/State",       RigidBodyState)
@@ -62,10 +62,10 @@ class RosTopics(Enum):
 topic_to_attr_dict: Dict[RosTopics, str] = {
     RosTopics.CAMERA_FRAME:         "camera_frame_pose",
     RosTopics.NEEDLE:               "needle_pose",
-    #RosTopics.CAMERA_L_STATE:       "camera_l_pose",
-    #RosTopics.CAMERA_L_IMAGE:       "camera_l_img",
-    #RosTopics.CAMERA_L_SEG_IMAGE:   "camera_l_seg_img",
-    #RosTopics.CAMERA_L_DEPTH:       "camera_l_depth",
+    RosTopics.CAMERA_L_STATE:       "camera_l_pose",
+    RosTopics.CAMERA_L_IMAGE:       "camera_l_img",
+    RosTopics.CAMERA_L_SEG_IMAGE:   "camera_l_seg_img",
+    RosTopics.CAMERA_L_DEPTH:       "camera_l_depth",
     RosTopics.CAMERA_0_IMAGE:       "camera_0_img",
     RosTopics.CAMERA_0_STATE:       "camera_0_pose",
     RosTopics.PSM1_TOOL_PITCH_LINK: "psm1_toolpitchlink_pose",
@@ -89,10 +89,10 @@ def get_topics_processing_cb() -> Dict[RosTopics, Callable[[Any], np.ndarray]]:
     return {
         RosTopics.CAMERA_FRAME:          _process_pose,
         RosTopics.NEEDLE:                _process_pose,
-        #RosTopics.CAMERA_L_STATE:        _process_pose,
-        #RosTopics.CAMERA_L_IMAGE:        img_cb,
-        #RosTopics.CAMERA_L_SEG_IMAGE:    img_cb,
-        #RosTopics.CAMERA_L_DEPTH:        pcd_cb,
+        RosTopics.CAMERA_L_STATE:        _process_pose,
+        RosTopics.CAMERA_L_IMAGE:        img_cb,
+        RosTopics.CAMERA_L_SEG_IMAGE:    img_cb,
+        RosTopics.CAMERA_L_DEPTH:        pcd_cb,
         RosTopics.CAMERA_0_IMAGE:        img_cb,
         RosTopics.CAMERA_0_STATE:        _process_pose,
         RosTopics.PSM1_TOOL_PITCH_LINK:  _process_pose,

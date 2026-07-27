@@ -83,13 +83,13 @@ class SimulatorDataProcessor:
     def __post_init__(self):
         if not self.camera_registry:
             self.camera_registry = [
-                #CameraConfig(
-                    #name="camera_l",
-                    #img_attr="camera_l_img",
-                    #pose_attr="camera_l_pose",
-                    #seg_img_attr="camera_l_seg_img",
-                    #is_world_frame=False,   # mounted on CameraFrame phantom
-                #),
+                CameraConfig(
+                    name="camera_l",
+                    img_attr="camera_l_img",
+                    pose_attr="camera_l_pose",
+                    seg_img_attr="camera_l_seg_img",
+                    is_world_frame=False,   # mounted on CameraFrame phantom
+                ),
                 CameraConfig(
                     name="camera_0",
                     img_attr="camera_0_img",
@@ -207,7 +207,7 @@ class SimulatorDataProcessor:
             if cfg.seg_img_attr is not None
             else img
         )
-        #depth_img = raw.camera_l_depth
+        depth_img = raw.camera_l_depth
 
         needle_pose     = self.get_needle_extrinsics(raw, cam_pose, cfg.is_world_frame)
         psm1_pitch_pose = self.get_tool_pose(raw.psm1_toolpitchlink_pose, cam_pose, raw, cfg.is_world_frame)
