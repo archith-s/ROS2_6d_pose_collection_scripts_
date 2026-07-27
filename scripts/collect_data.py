@@ -1,6 +1,6 @@
 # collect_data.py
 # python ROS2_6d_pose_collection_scripts_/scripts/collect_data.py --path ./dataset --scene_id 1
-# python3 ROS2_6d_pose_collection_scripts_/scripts/collect_data.py --path ./dataset --scene_id 1
+# python3 ROS2_6d_pose_collection_scripts_/scripts/collect_data.py --path ./0.04 --scene_id 1
 
 from pathlib import Path
 import sys
