@@ -83,13 +83,13 @@ class SimulatorDataProcessor:
     def __post_init__(self):
         if not self.camera_registry:
             self.camera_registry = [
-                CameraConfig(
-                    name="camera_l",
-                    img_attr="camera_l_img",
-                    pose_attr="camera_l_pose",
-                    seg_img_attr="camera_l_seg_img",
-                    is_world_frame=False,   # mounted on CameraFrame phantom
-                ),
+                #CameraConfig(
+                    #name="camera_l",
+                    #img_attr="camera_l_img",
+                    #pose_attr="camera_l_pose",
+                    #seg_img_attr="camera_l_seg_img",
+                    #is_world_frame=False,   # mounted on CameraFrame phantom
+                #),
                 CameraConfig(
                     name="camera_0",
                     img_attr="camera_0_img",

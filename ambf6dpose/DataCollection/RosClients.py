@@ -24,10 +24,10 @@ from ambf6dpose.DataCollection.Rostopics import (
 class RawSimulationData:
     camera_frame_pose: np.ndarray
     needle_pose: np.ndarray
-    camera_l_pose: np.ndarray
-    camera_l_img: np.ndarray
-    camera_l_seg_img: np.ndarray
-    camera_l_depth: np.ndarray
+    #camera_l_pose: np.ndarray
+    #camera_l_img: np.ndarray
+    #camera_l_seg_img: np.ndarray
+    #camera_l_depth: np.ndarray
     camera_0_pose: np.ndarray
     camera_0_img: np.ndarray
     psm1_toolpitchlink_pose: np.ndarray
